@@ -1,0 +1,8 @@
+.envrc
+.env
+
+build/*
+!build/.gitkeep
+
+tmp/*
+!tmp/.gitkeep

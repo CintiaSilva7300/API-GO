@@ -1,0 +1,67 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_ca
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    restart: on-failure:3 
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASS}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_SSL_MODE=${POSTGRES_SSL_MODE}
+      - PGPORT=${POSTGRES_PORT}
+    volumes:
+      - postgres_data:/data/postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
+      interval: 20s
+      timeout: 10s
+      retries: 3
+    networks:
+      - postgres-network
+  
+  pgweb:
+    image: sosedoff/pgweb:latest
+    container_name: postgres_pgweb
+    environment:
+      PGWEB_DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASS}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}?sslmode=${POSTGRES_SSL_MODE}
+    ports:
+      - 8085:8081
+    restart: on-failure:3
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "nc", "-vz", "127.0.0.1", "8081"]
+      interval: 5s
+    networks:
+      - postgres-network
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+        - 5672:5672
+        - 15672:15672
+    environment:
+      - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_VHOST}
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    networks:
+        - rmq-network
+
+volumes:
+  postgres_data:
+    driver: local
+  cache:
+    driver: local
+
+networks:
+  postgres-network:
+    driver: bridge
+  rmq-network:
+    driver: bridge
