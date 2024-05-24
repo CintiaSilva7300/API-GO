@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS "public"."db_test";
+DROP TABLE IF EXISTS "public"."tb_user";

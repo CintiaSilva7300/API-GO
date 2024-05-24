@@ -2,10 +2,10 @@ package main
 
 import (
 	"API-GO/config"
-	"API-GO/domain"
-	"API-GO/mock"
+	// "API-GO/domain"
+	// "API-GO/mock"
 	"API-GO/service/message"
-	"database/sql"
+	// "context"
 	"fmt"
 	"log"
 
@@ -14,7 +14,7 @@ import (
 )
 
 func main() {
-	// Get the connection string from the config
+	// // Get the connection string from the config
 	// dbconnStr := config.GetDBConnectionString()
 
 	// // Attempt to open a connection to the database
@@ -33,10 +33,8 @@ func main() {
 
 	// fmt.Println("Successfully connected to the database")
 
-	// // Create a new user
+	// // Insert mock users into the database (if needed)
 	// users := mock.MockUsers()
-
-	// // Insert mock users into the database
 	// for _, user := range users {
 	// 	err = domain.InsertUser(db, user)
 	// 	if err != nil {
@@ -46,36 +44,28 @@ func main() {
 
 	// fmt.Println("Mock users created successfully")
 
-	// Get the connection string from the config
-	dbconnStr := config.GetDBConnectionString()
+	// // Start the message listener
+	// message.StartMessageListener(db)
 
-	// Attempt to open a connection to the database
-	db, err := sql.Open("postgres", dbconnStr)
+	pool, err := config.GetDBConnectionPool()
 	if err != nil {
 		log.Fatalf("Could not connect to database: %v", err)
 	}
-
-	// Check if the connection is actually alive
-	err = db.Ping()
-	if err != nil {
-		log.Fatalf("Could not establish a connection: %v", err)
-	}
-
-	defer db.Close()
+	defer pool.Close()
 
 	fmt.Println("Successfully connected to the database")
 
 	// Insert mock users into the database (if needed)
-	users := mock.MockUsers()
-	for _, user := range users {
-		err = domain.InsertUser(db, user)
-		if err != nil {
-			log.Fatalf("Error inserting user: %v", err)
-		}
-	}
+	// users := mock.MockUsers()
+	// for _, user := range users {
+	// 	err = domain.InsertUser(context.Background(), pool, user)
+	// 	if err != nil {
+	// 		log.Fatalf("Error inserting user: %v", err)
+	// 	}
+	// }
 
 	fmt.Println("Mock users created successfully")
 
 	// Start the message listener
-	message.StartMessageListener(db)
+	message.StartMessageListener(pool)
 }

@@ -18,17 +18,34 @@ def generate_user():
         "last_name": last_name,
         "email": f"{first_name.lower()}.{last_name.lower()}@{fake.domain_name()}",
         # "created_at": datetime.now(timezone.utc).strftime('%Y-%m-%d')
+        # "created_at": datetime.now().strftime('%Y-%m-%d')
     }
 
 def main():
     connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
     channel = connection.channel()
 
-    channel.queue_declare(queue='user')
+    # Declare the DLX exchange
+    channel.exchange_declare(exchange='dlx_exchange', exchange_type='direct', durable=True)
+
+    # Declare the DLX queue
+    channel.queue_declare(queue='dlx_queue', durable=True)
+
+    # Bind DLX queue to DLX exchange
+    channel.queue_bind(exchange='dlx_exchange', queue='dlx_queue', routing_key='dlx_routing_key')
+
+    # Declare the main queue with DLX parameters
+    args = {
+        'x-dead-letter-exchange': 'dlx_exchange',
+        'x-dead-letter-routing-key': 'dlx_routing_key'
+    }
+
+    channel.queue_declare(queue='user', durable=True, arguments=args)
 
     curr_time = datetime.now()
 
-    while (datetime.now() - curr_time).seconds < 120:
+    # while (datetime.now() - curr_time).seconds < 120:
+    for _ in range(10000):
         try:
             user = generate_user()
 
