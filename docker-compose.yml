@@ -3,7 +3,7 @@ version: "3.8"
 services:
   postgres:
     image: postgres:latest
-    container_name: postgres_ca
+    container_name: postgres
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     restart: on-failure:3 

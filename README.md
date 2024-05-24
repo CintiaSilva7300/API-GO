@@ -25,7 +25,7 @@ API-GO é um projeto em Golang que se conecta a um banco de dados PostgreSQL e c
 - [amqp](https://github.com/streadway/amqp): Biblioteca para interagir com RabbitMQ.
 - [uuid](https://github.com/google/uuid): Biblioteca para geração de UUIDs.
 - [pika](https://pika.readthedocs.io/): Biblioteca Python para interagir com RabbitMQ.
-
+- [pgx](https://github.com/jackc/pgx): Driver PostgreSQL para Golang com suporte a pool de conexões.
 
 ## Pré-requisitos
 
@@ -39,7 +39,7 @@ API-GO é um projeto em Golang que se conecta a um banco de dados PostgreSQL e c
 ## Configuração
 
 ### Gerando Usuários Fictícios e Enviando para RabbitMQ
-O script user-generator.py é usado para gerar usuários fictícios e enviar mensagens para a fila RabbitMQ para testar a aplicação.
+O script user-generator.py é usado para gerar usuários fictícios e enviar mensagens para a fila RabbitMQ para testar a aplicação. Para vizualização das mensagens na fila pode estar acessando localmente o endereço: http://localhost:15672/#/queues
 
 ### Instale as dependências Python:
 
@@ -85,13 +85,6 @@ migrate-down:
 
 ```
 
-### Example de Makefile
-
-```bash
-  git clone https://github.com/seu-usuario/API-GO.git
-  cd API-GO
-```
-
 ### Clone o repositório:
 ```bash
   git clone https://github.com/seu-usuario/API-GO.git
@@ -100,7 +93,7 @@ migrate-down:
 
 ### Inicie os contêineres do Docker:
 ```bash
-  docker-compose up -d
+   docker-compose up -d ||  docker-compose up 
 ```
 
 ### Execute as migrações do banco de dados usando o Makefile:
@@ -113,3 +106,6 @@ migrate-down:
   go run main.go
 
 ```
+## Visualizando Dados no Banco de Dados
+
+Para visualizar os dados inseridos na tabela do banco de dados, você pode usar uma ferramenta de gerenciamento de banco de dados como o DBeaver.

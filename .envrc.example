@@ -1,0 +1,24 @@
+export RABBITMQ_USER=guest
+export RABBITMQ_PASSWORD=guest
+# export RABBITMQ_URL=amqp://guest:guest@localhost:5672
+export RABBITMQ_URL=localhost
+export RABBITMQ_DURABLE=true
+export RABBITMQ_AUTOACK=false
+export RABBITMQ_EXCLUSIVE=false
+export RABBITMQ_NOWAIT=false
+export RABBITMQ_NOLOCAL=false
+export RABBITMQ_MANDATORY=false
+export RABBITMQ_IMMEDIATE=false
+export RABBITMQ_NAME=default
+export RABBITMQ_EXCHANGE=teste
+export RABBITMQ_KIND=direct
+export RABBITMQ_ROUTING_KEY=
+export RABBITMQ_ENABLE=true
+export RABBITMQ_VHOST=/
+
+export POSTGRES_HOST=localhost
+export POSTGRES_PORT=5432
+export POSTGRES_USER=postgres
+export POSTGRES_PASS=123
+export POSTGRES_DB=postgres
+export POSTGRES_SSL_MODE=disable
