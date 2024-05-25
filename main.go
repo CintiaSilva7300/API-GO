@@ -1,11 +1,14 @@
 package main
 
 import (
-	"API-GO/config"
+
 	// "API-GO/domain"
 	// "API-GO/mock"
-	"API-GO/service/message"
+
 	// "context"
+
+	"API-GO/config"
+	"API-GO/service/message"
 	"fmt"
 	"log"
 
@@ -30,9 +33,12 @@ func main() {
 	// 		log.Fatalf("Error inserting user: %v", err)
 	// 	}
 	// }
-
-	fmt.Println("Mock users created successfully")
+	// fmt.Println("Mock users created successfully")
 
 	// Start the message listener
 	message.StartMessageListener(pool)
 }
+
+// func main() {
+// 	cmd.Execute()
+// }
